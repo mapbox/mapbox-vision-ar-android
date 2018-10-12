@@ -60,7 +60,7 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // Mapbox Vision SDK
-    api 'com.mapbox.vision:mapbox-android-vision:0.1.0-SNAPSHOT'
+    api 'com.mapbox.vision:mapbox-android-vision:0.1.0'
 
     api 'com.mapbox.mapboxsdk:mapbox-android-navigation:0.20.0'
 
