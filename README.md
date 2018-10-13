@@ -7,7 +7,7 @@ for your car. In doing so, the Vision SDK enables the following user-facing feat
 - Augmented reality navigation with turn-by-turn directions
 - Classification and display of regulatory and warning signs
 - Object detection for vehicles, pedestrians, road signs, and traffic lights
-- Semantic segmentation of the roadway into 12 different classes (roadway, painted roadway (e.g. crosswalk), lane boundaries, traffic lights, traffic signs, vehicles, cyclists, pedestrians, buildings, vegetation, sky, other)
+- Semantic segmentation of the roadway into 14 different classes (other, road, road_markup, flat_non_road, sky, building, car, cycle, person, road_markings_other, curb, double_yellow, traffic_sign, traffic_light)
 - Distance detection that indicates spacing to lead vehicle
 
 #### Components of the Vision SDK
@@ -37,11 +37,12 @@ You can look for an example of complete integration in the [Mapbox Vision SDK Te
 
 1. Add the dependencies:
 
-Add the following dependency to your project's `build.gradle`:
+Add the following dependencies to your project's `build.gradle`:
 
 ```
-    implementation 'com.mapbox.vision:mapbox-android-vision:0.1.0-SNAPSHOT'
-    implementation 'com.mapbox.vision:mapbox-android-vision-ar:0.1.0-SNAPSHOT'
+    implementation 'com.mapbox.vision:mapbox-android-vision:0.1.0'
+    implementation 'com.mapbox.vision:mapbox-android-vision-ar:0.1.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation:0.21.0'
 ```
 
 and to your top-level `build.gradle`:
@@ -59,7 +60,6 @@ class DemoApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Mapbox.getInstance(this, getString(R.string.mapbox_access_token))
         VisionManager.init(this, "<access token>")
     }
 }
@@ -80,7 +80,7 @@ Mapbox Vision SDK will require the following list of permissions to work:
 
 You should grant them all before calling the SDK.
 
-4. Add VisionView to the activity layout:
+4. Add GlArView to the activity layout:
 
 GlArView will render the navigation route on top of camera image.
 
