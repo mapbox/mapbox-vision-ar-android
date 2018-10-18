@@ -5,19 +5,25 @@ import android.graphics.PixelFormat
 import android.location.Location
 import android.opengl.GLSurfaceView
 import android.util.AttributeSet
+import com.mapbox.services.android.navigation.v5.offroute.OffRouteListener
 import com.mapbox.services.android.navigation.v5.routeprogress.ProgressChangeListener
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress
 import com.mapbox.vision.VideoStreamListener
 import com.mapbox.vision.VisionManager
 import com.mapbox.vision.models.route.NavigationRoute
 import com.mapbox.vision.models.route.RoutePoint
+import com.mapbox.vision.performance.ModelPerformance
+import com.mapbox.vision.performance.ModelPerformanceConfig
+import com.mapbox.vision.performance.ModelPerformanceMode
+import com.mapbox.vision.performance.ModelPerformanceRate
 
 /**
  * Draws AR navigation route on top of the video stream from camera.
  */
-class GlArView : GLSurfaceView, VideoStreamListener, ProgressChangeListener {
+class GlArView : GLSurfaceView, VideoStreamListener, ProgressChangeListener, OffRouteListener {
 
     private val render: GlArRender
+    private var needToUpdateRoute: Boolean = true
 
     constructor(context: Context) : this(context, null)
 
@@ -40,6 +46,15 @@ class GlArView : GLSurfaceView, VideoStreamListener, ProgressChangeListener {
         renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
 
         VisionManager.setVideoStreamListener(this)
+        VisionManager.setModelPerformanceConfig(
+                ModelPerformanceConfig.Merged(
+                        performance = ModelPerformance.On(ModelPerformanceMode.DYNAMIC, ModelPerformanceRate.LOW)
+                )
+        )
+    }
+
+    override fun onNewFrame(byteArray: ByteArray) {
+        render.onNewBackgroundSource(byteArray)
     }
 
     override fun onProgressChange(location: Location?, routeProgress: RouteProgress?) {
@@ -47,11 +62,14 @@ class GlArView : GLSurfaceView, VideoStreamListener, ProgressChangeListener {
             VisionManager.stopNavigation()
             return
         }
-        VisionManager.startNavigation(routeProgress.toNavigationRoute())
+        if (needToUpdateRoute) {
+            VisionManager.startNavigation(routeProgress.toNavigationRoute())
+            needToUpdateRoute = false
+        }
     }
 
-    override fun onNewFrame(byteArray: ByteArray) {
-        render.onNewBackgroundSource(byteArray)
+    override fun userOffRoute(location: Location?) {
+        needToUpdateRoute = true
     }
 
     private fun RouteProgress.toNavigationRoute(): NavigationRoute {
@@ -67,6 +85,7 @@ class GlArView : GLSurfaceView, VideoStreamListener, ProgressChangeListener {
 
                 step.intersections()
                         ?.map {
+
                             RoutePoint(
                                     latitude = it.location().latitude(),
                                     longitude = it.location().longitude(),
