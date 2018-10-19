@@ -61,7 +61,9 @@ dependencies {
 
     api "com.mapbox.vision:mapbox-android-vision:$vision_core"
 
-    api "com.mapbox.mapboxsdk:mapbox-android-navigation:$mapbox_navigation"
+    api ("com.mapbox.mapboxsdk:mapbox-android-navigation:$mapbox_navigation") {
+        exclude module: 'mapbox-android-telemetry'
+    }
 }
 
 tasks.withType(Javadoc).all {
