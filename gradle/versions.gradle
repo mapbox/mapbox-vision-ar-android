@@ -6,6 +6,6 @@ ext {
     compile_sdk_version = 28
     build_tools_version = '28.0.3'
 
-    vision_core = '0.1.0'
+    vision_core = '0.1.1'
     mapbox_navigation = '0.21.0'
 }
