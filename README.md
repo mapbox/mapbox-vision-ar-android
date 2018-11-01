@@ -34,3 +34,7 @@ You can also check more details at [Vison SDK FAQ](https://vision.mapbox.com/faq
 ## Installation and setup
  
 The Vision SDK is currently in limited public beta. Contact our team to [request access](https://vision.mapbox.com/#application) and receive installation instructions.
+
+## Note
+
+Please checkout to `master` branch to compile the project. `dev` is development branch and could contain not stable code
