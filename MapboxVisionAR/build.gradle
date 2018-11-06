@@ -59,7 +59,11 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    api "com.mapbox.vision:mapbox-android-vision:$vision_core"
+    if (envVarOrLocalProperty('BUILD_CORE_FROM_SOURCE')) {
+        api project(path: ':MapboxVision')
+    } else {
+        api "com.mapbox.vision:mapbox-android-vision:$vision_core"
+    }
 
     api "com.mapbox.mapboxsdk:mapbox-android-navigation:$mapbox_navigation"
 }
