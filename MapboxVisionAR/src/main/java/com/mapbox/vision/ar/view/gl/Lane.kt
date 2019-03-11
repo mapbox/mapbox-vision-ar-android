@@ -8,7 +8,7 @@ import de.javagl.obj.ObjReader
 import de.javagl.obj.ObjUtils
 import java.nio.FloatBuffer
 
-internal class ArLane(context: Context) : GlArRender.OnSurfaceChangedListener {
+internal class Lane(context: Context) : GlRender.OnSurfaceChangedListener {
 
     private companion object {
         private val VERTEX_SHADER = """
@@ -167,14 +167,14 @@ void main()
 
     override fun onSurfaceChanged() {
         // prepare shaders and OpenGL program
-        val vertexShader = GlArRender.loadShader(GLES20.GL_VERTEX_SHADER, VERTEX_SHADER)
-        val fragmentShader = GlArRender.loadShader(GLES20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER)
+        val vertexShader = GlRender.loadShader(GLES20.GL_VERTEX_SHADER, VERTEX_SHADER)
+        val fragmentShader = GlRender.loadShader(GLES20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER)
 
         mProgram = GLES20.glCreateProgram()             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader)   // add the vertex shader to program
         GLES20.glAttachShader(mProgram, fragmentShader) // add the fragment shader to program
         GLES20.glLinkProgram(mProgram)                  // create OpenGL program executables
-        GlArRender.checkGlError("ArLane -> mProgram")
+        GlRender.checkGlError("ArLane -> mProgram")
     }
 
     /**
@@ -186,66 +186,66 @@ void main()
     fun draw(mvpMatrix: Matrix4, modelMatrix: Matrix4, normMatrix: Matrix3, laneParams: FloatArray) {
         // Add program to OpenGL environment
         GLES20.glUseProgram(mProgram)
-        GlArRender.checkGlError("ArLane.glUseProgram")
+        GlRender.checkGlError("ArLane.glUseProgram")
 
         // get handle to vertex shader's vPosition member
         aPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition")
         GLES20.glEnableVertexAttribArray(aPositionHandle)
         GLES20.glVertexAttribPointer(aPositionHandle, 3, GLES20.GL_FLOAT, false, 12, vertexBuffer)
-        GlArRender.checkGlError("ArLane -> aPositionHandle")
+        GlRender.checkGlError("ArLane -> aPositionHandle")
 
         aTexHandle = GLES20.glGetAttribLocation(mProgram, "aTex")
         GLES20.glEnableVertexAttribArray(aTexHandle)
         GLES20.glVertexAttribPointer(aTexHandle, 2, GLES20.GL_FLOAT, false, 8, texBuffer)
-        GlArRender.checkGlError("ArLane -> aTex")
+        GlRender.checkGlError("ArLane -> aTex")
 
         aNormalHandle = GLES20.glGetAttribLocation(mProgram, "aNormal")
         GLES20.glEnableVertexAttribArray(aNormalHandle)
         GLES20.glVertexAttribPointer(aNormalHandle, 3, GLES20.GL_FLOAT, false, 12, normalsBuffer)
-        GlArRender.checkGlError("ArLane -> aNormal")
+        GlRender.checkGlError("ArLane -> aNormal")
 
         /// Uniforms
 
         // get handle to fragment shader's vColor member
         uColorHandle = GLES20.glGetUniformLocation(mProgram, "uColor")
         GLES20.glUniform4fv(uColorHandle, 1, laneColor, 0)
-        GlArRender.checkGlError("ArLane -> uColorHandle")
+        GlRender.checkGlError("ArLane -> uColorHandle")
 
         uAmbientLightColorHandle = GLES20.glGetUniformLocation(mProgram, "uAmbientLightColor")
         GLES20.glUniform3fv(uAmbientLightColorHandle, 1, laneAmbientColor, 0)
-        GlArRender.checkGlError("ArLane -> uAmbientLightColorHandle")
+        GlRender.checkGlError("ArLane -> uAmbientLightColorHandle")
 
         uSpecularColorHandle = GLES20.glGetUniformLocation(mProgram, "uSpecularColor")
         GLES20.glUniform4fv(uSpecularColorHandle, 1, laneSpecularColor, 0)
-        GlArRender.checkGlError("ArLane -> uSpecularColorHandle")
+        GlRender.checkGlError("ArLane -> uSpecularColorHandle")
 
         uLightColorHandle = GLES20.glGetUniformLocation(mProgram, "uLightColor")
         GLES20.glUniform3fv(uLightColorHandle, 1, laneLightColor, 0)
-        GlArRender.checkGlError("ArLane -> uLightColorHandle")
+        GlRender.checkGlError("ArLane -> uLightColorHandle")
 
         uCameraWorldPosHandle = GLES20.glGetUniformLocation(mProgram, "uCameraWorldPos")
         GLES20.glUniform3fv(uCameraWorldPosHandle, 1, cameraPosition, 0)
-        GlArRender.checkGlError("ArLane -> uCameraWorldPosHandle")
+        GlRender.checkGlError("ArLane -> uCameraWorldPosHandle")
 
         uLightWorldPosHandle = GLES20.glGetUniformLocation(mProgram, "uLightWorldPos")
         GLES20.glUniform3fv(uLightWorldPosHandle, 1, laneLightPosition, 0)
-        GlArRender.checkGlError("ArLane -> uLightWorldPosHandle")
+        GlRender.checkGlError("ArLane -> uLightWorldPosHandle")
 
         uMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix")
         GLES20.glUniformMatrix4fv(uMVPMatrixHandle, 1, false, mvpMatrix.toFloatArray(), 0)
-        GlArRender.checkGlError("ArLane -> uMVPMatrixHandle")
+        GlRender.checkGlError("ArLane -> uMVPMatrixHandle")
 
         uModelMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uModelMatrix")
         GLES20.glUniformMatrix4fv(uModelMatrixHandle, 1, false, modelMatrix.toFloatArray(), 0)
-        GlArRender.checkGlError("ArLane -> uModelMatrixHandle")
+        GlRender.checkGlError("ArLane -> uModelMatrixHandle")
 
         uNormMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uNormMatrixHandle")
         GLES20.glUniformMatrix3fv(uNormMatrixHandle, 1, false, normMatrix.toFloatArray(), 0)
-        GlArRender.checkGlError("ArLane -> uNormMatrixHandle")
+        GlRender.checkGlError("ArLane -> uNormMatrixHandle")
 
         uLaneParamsHandle = GLES20.glGetUniformLocation(mProgram, "uLaneParams")
         GLES20.glUniform3fv(uLaneParamsHandle, 4, laneParams, 0)
-        GlArRender.checkGlError("ArLane -> uLaneParamsHandle")
+        GlRender.checkGlError("ArLane -> uLaneParamsHandle")
 
         GLES20.glEnable(GLES20.GL_BLEND)
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)

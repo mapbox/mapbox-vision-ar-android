@@ -5,10 +5,10 @@ import android.opengl.Matrix
 import java.nio.ByteBuffer
 import java.nio.FloatBuffer
 
-internal class ArBackground(
+internal class Background(
         private val texWidth: Int,
         private val texHeight: Int
-) : GlArRender.OnSurfaceChangedListener {
+) : GlRender.OnSurfaceChangedListener {
 
     companion object {
         private val VERTEX_SHADER = """
@@ -70,14 +70,14 @@ void main()
 
     override fun onSurfaceChanged() {
         // prepare shaders and OpenGL program
-        val vertexShader = GlArRender.loadShader(GLES20.GL_VERTEX_SHADER, VERTEX_SHADER)
-        val fragmentShader = GlArRender.loadShader(GLES20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER)
+        val vertexShader = GlRender.loadShader(GLES20.GL_VERTEX_SHADER, VERTEX_SHADER)
+        val fragmentShader = GlRender.loadShader(GLES20.GL_FRAGMENT_SHADER, FRAGMENT_SHADER)
 
         mProgram = GLES20.glCreateProgram()             // create empty OpenGL Program
         GLES20.glAttachShader(mProgram, vertexShader)   // add the vertex shader to program
         GLES20.glAttachShader(mProgram, fragmentShader) // add the fragment shader to program
         GLES20.glLinkProgram(mProgram)                  // create OpenGL program executables
-        GlArRender.checkGlError("ArBackground -> mProgram")
+        GlRender.checkGlError("ArBackground -> mProgram")
 
         textureHandler = createTexture()
     }
@@ -110,25 +110,25 @@ void main()
 
     fun draw() {
         GLES20.glUseProgram(mProgram)
-        GlArRender.checkGlError("ArBackground.glUseProgram")
+        GlRender.checkGlError("ArBackground.glUseProgram")
 
         // get handle to vertex shader's vPosition member
         val aPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition")
         GLES20.glEnableVertexAttribArray(aPositionHandle)
         GLES20.glVertexAttribPointer(aPositionHandle, 3, GLES20.GL_FLOAT, false, 12, vertexBuffer)
-        GlArRender.checkGlError("ArLane -> aPositionHandle")
+        GlRender.checkGlError("ArLane -> aPositionHandle")
 
         val aTexHandle = GLES20.glGetAttribLocation(mProgram, "aTex")
         GLES20.glEnableVertexAttribArray(aTexHandle)
         GLES20.glVertexAttribPointer(aTexHandle, 2, GLES20.GL_FLOAT, false, 8, texBuffer)
-        GlArRender.checkGlError("ArLane -> aTex")
+        GlRender.checkGlError("ArLane -> aTex")
 
         val projMatrix = FloatArray(16)
         Matrix.orthoM(projMatrix, 0, 0f, 1f, 0f, 1f, -1f, 1f)
 
         val uMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix")
         GLES20.glUniformMatrix4fv(uMVPMatrixHandle, 1, false, projMatrix, 0)
-        GlArRender.checkGlError("ArLane -> uMVPMatrixHandle")
+        GlRender.checkGlError("ArLane -> uMVPMatrixHandle")
 
         updateTexture()
 
@@ -136,7 +136,7 @@ void main()
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandler)
         GLES20.glUniform1i(uTextureHandle, 0)
-        GlArRender.checkGlError("ArLane -> TextureUniform")
+        GlRender.checkGlError("ArLane -> TextureUniform")
 
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 6)
 
