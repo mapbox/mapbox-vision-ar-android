@@ -26,6 +26,24 @@ if (envVarOrLocalProperty('IS_LOCAL_DEVELOPMENT')) {
         moduleName = 'mapbox-vision-ar'
         outputDirectory = "$buildDir/javadoc"
         outputFormat = 'javadoc'
+
+        kotlinTasks {
+            defaultKotlinTasks() + [':CoreAr:compileReleaseKotlin']
+        }
+
+        // TODO finish packaging options
+        packageOptions {
+            prefix = "com.mapbox.vision.ar"
+            suppress = true
+        }
+        packageOptions {
+            prefix = "com.mapbox.vision.ar.view.gl"
+            suppress = false
+        }
+        packageOptions {
+            prefix = "com.mapbox.vision.ar.models"
+            suppress = false
+        }
     }
 }
 
@@ -60,9 +78,12 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     if (envVarOrLocalProperty('BUILD_CORE_FROM_SOURCE')) {
-        api project(path: ':MapboxVision')
+        implementation project(path: ':CoreSdk')
+        implementation project(path: ':CoreAr')
+        implementation project(path: ':Vision')
     } else {
         api "com.mapbox.vision:mapbox-android-vision:$vision_core"
+        // TODO core vision AR
     }
 
     api "com.mapbox.mapboxsdk:mapbox-android-navigation:$mapbox_navigation"

@@ -2,7 +2,7 @@ package com.mapbox.vision.ar.view.gl
 
 import android.opengl.Matrix
 
-internal class ArCamera(
+internal class Camera(
         private val aspectRatio: Float,
         private val viewAspectRatio: Float,
         private val verticalFOVRadians: Float,
