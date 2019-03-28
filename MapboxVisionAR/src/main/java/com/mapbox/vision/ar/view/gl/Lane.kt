@@ -2,6 +2,7 @@ package com.mapbox.vision.ar.view.gl
 
 import android.content.Context
 import android.opengl.GLES20
+import com.mapbox.vision.ar.LaneVisualParams
 import com.mapbox.vision.ar.R
 import de.javagl.obj.ObjData
 import de.javagl.obj.ObjReader
@@ -11,6 +12,9 @@ import java.nio.FloatBuffer
 internal class Lane(context: Context) : GlRender.OnSurfaceChangedListener {
 
     private companion object {
+
+        internal const val LANE_DEFAULT_WIDTH = 1.0f // meters
+
         private val VERTEX_SHADER = """
 uniform mat4 uMVPMatrix;
 uniform mat4 uModelMatrix;
@@ -45,7 +49,9 @@ void main()
     vec3 offsetVector = normalize(vec3(baseDirection.z, 0, -baseDirection.x));
     vec3 smoothedPos = basePoint - offsetVector * aPosition.x;
 
-    vec4 worldPosition = uModelMatrix * vec4(smoothedPos.x, aPosition.y + basePoint.y, smoothedPos.z, 1);
+    float lineWidth = smoothedPos.x * uLaneWidthRatio; // smoothedPos.x = $LANE_DEFAULT_WIDTH by default
+
+    vec4 worldPosition = uModelMatrix * vec4(lineWidth, aPosition.y + basePoint.y, smoothedPos.z, 1);
 
     vWorldPos = worldPosition.xyz;
     vWorldNormal = uNormMatrix * aNormal;
@@ -88,19 +94,20 @@ void main()
     gl_FragColor = vec4(finalColor.xyz, uColor.w * vTexCoords.y);
 }
             """.trimIndent()
-
-        private val laneColor = floatArrayOf(0.2745f, 0.4117f, 0.949f, 0.99f)
-        private val laneAmbientColor = floatArrayOf(laneColor[0], laneColor[1], laneColor[2])
-        private val laneSpecularColor = floatArrayOf(1f, 1f, 1f, 100f)
-        private val laneLightColor = floatArrayOf(1f, 1f, 1f)
-        private val laneLightPosition = floatArrayOf(0f, 7f, 0f)
     }
+
+    private val laneColor = floatArrayOf(0.2745f, 0.4117f, 0.949f, 0.99f)
+    private val laneAmbientColor = floatArrayOf(laneColor[0], laneColor[1], laneColor[2])
+    private val laneSpecularColor = floatArrayOf(1f, 1f, 1f, 100f)
+    private val laneLightColor = floatArrayOf(1f, 1f, 1f)
+    private val laneLightPosition = floatArrayOf(0f, 7f, 0f)
 
     private val vertexBuffer: FloatBuffer
     private val normalsBuffer: FloatBuffer
     private val texBuffer: FloatBuffer
     private var mProgram: Int = 0
     private val trianglesNum: Int
+    private var laneWidthRatio: Float = 1.0f
 
     private var aPositionHandle: Int = 0
     private var aTexHandle: Int = 0
@@ -116,6 +123,7 @@ void main()
     private var uLightWorldPosHandle: Int = 0
     private var uAmbientLightColorHandle: Int = 0
     private var uLightColorHandle: Int = 0
+    private var uLaneWidthHandler: Int = 0
 
     private var cameraPosition: FloatArray = floatArrayOf(0f, 0f, 0f);
 
@@ -175,6 +183,37 @@ void main()
         GLES20.glAttachShader(mProgram, fragmentShader) // add the fragment shader to program
         GLES20.glLinkProgram(mProgram)                  // create OpenGL program executables
         GlRender.checkGlError("ArLane -> mProgram")
+    }
+
+    fun setLaneVisualParams(laneVisualParams: LaneVisualParams) {
+        if (LaneVisualParams.isValid(laneVisualParams.color)) {
+            laneColor[0] = laneVisualParams.color.r
+            laneColor[1] = laneVisualParams.color.g
+            laneColor[2] = laneVisualParams.color.b
+            laneColor[3] = laneVisualParams.color.a
+        }
+
+        if (LaneVisualParams.isValid(laneVisualParams.ambientColor)) {
+            laneAmbientColor[0] = laneVisualParams.ambientColor.r
+            laneAmbientColor[1] = laneVisualParams.ambientColor.g
+            laneAmbientColor[2] = laneVisualParams.ambientColor.b
+        }
+
+        if (LaneVisualParams.isValid(laneVisualParams.lightColor)) {
+            laneLightColor[0] = laneVisualParams.lightColor.r
+            laneLightColor[1] = laneVisualParams.lightColor.g
+            laneLightColor[2] = laneVisualParams.lightColor.b
+        }
+
+        laneVisualParams.light?.let { light ->
+            laneLightPosition[0] = light.x.toFloat()
+            laneLightPosition[1] = light.y.toFloat()
+            laneLightPosition[2] = light.z.toFloat()
+        }
+
+        if (LaneVisualParams.isValid(laneVisualParams.width)) {
+            laneWidthRatio = laneVisualParams.width.toFloat() / LANE_DEFAULT_WIDTH
+        }
     }
 
     /**
@@ -246,6 +285,10 @@ void main()
         uLaneParamsHandle = GLES20.glGetUniformLocation(mProgram, "uLaneParams")
         GLES20.glUniform3fv(uLaneParamsHandle, 4, laneParams, 0)
         GlRender.checkGlError("ArLane -> uLaneParamsHandle")
+
+        uLaneWidthHandler = GLES20.glGetUniformLocation(mProgram, "uLaneWidthRatio")
+        GLES20.glUniform1f(uLaneWidthHandler, laneWidthRatio)
+        GlRender.checkGlError("ArLane -> uLaneWidthHandler")
 
         GLES20.glEnable(GLES20.GL_BLEND)
         GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)

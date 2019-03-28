@@ -26,9 +26,9 @@ class VisionArView : GLSurfaceView, VideoSourceListener, VisionArEventsListener 
         // FIXME
         val frameSize = ImageSize(1280, 720)
         render = GlRender(
-                context = context,
-                width = frameSize.imageWidth,
-                height = frameSize.imageHeight
+            context = context,
+            width = frameSize.imageWidth,
+            height = frameSize.imageHeight
         )
         setEGLContextClientVersion(2)
         holder.setFormat(PixelFormat.RGBA_8888)
@@ -59,11 +59,7 @@ class VisionArView : GLSurfaceView, VideoSourceListener, VisionArEventsListener 
         // TODO change render
     }
 
-    fun setLaneLength(lengthMeters: Double) {
-        TODO()
-    }
-
     fun setLaneVisualParams(laneVisualParams: LaneVisualParams) {
-        TODO()
+        render.onNewLaneVisualParams(laneVisualParams)
     }
 }
