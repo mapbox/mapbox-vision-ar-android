@@ -78,7 +78,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     if (envVarOrLocalProperty('BUILD_CORE_FROM_SOURCE')) {
-        implementation project(path: ':CoreSdk')
         implementation project(path: ':CoreAr')
         implementation project(path: ':Vision')
     } else {
