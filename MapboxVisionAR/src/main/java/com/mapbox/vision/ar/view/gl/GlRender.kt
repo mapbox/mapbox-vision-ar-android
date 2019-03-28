@@ -44,9 +44,12 @@ internal class GlRender(
     }
 
     private fun FloatArray.addPointToLaneParams(index: Int, worldCoordinate: WorldCoordinate) {
-        set(index * 3, worldCoordinate.x.toFloat())
+        // `x` points right
+        set(index * 3, -worldCoordinate.y.toFloat())
+        // `y` points top
         set(index * 3 + 1, worldCoordinate.z.toFloat())
-        set(index * 3 + 2, -worldCoordinate.y.toFloat())
+        // `z` points back
+        set(index * 3 + 2, -worldCoordinate.x.toFloat())
     }
 
     override fun onDrawFrame(unused: GL10) {
