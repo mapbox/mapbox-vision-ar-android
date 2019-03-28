@@ -4,6 +4,7 @@ import android.content.Context
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import com.mapbox.vision.BuildConfig
+import com.mapbox.vision.ar.LaneVisualParams
 import com.mapbox.vision.mobile.models.world.WorldCoordinate
 import com.mapbox.vision.utils.VisionLogger
 import javax.microedition.khronos.egl.EGLConfig
@@ -89,6 +90,10 @@ internal class GlRender(
 
     internal fun onNewBackground(rgbaArray: ByteArray) {
         background.updateTexture(rgbaArray)
+    }
+
+    internal fun onNewLaneVisualParams(laneVisualParams: LaneVisualParams) {
+        lane.setLaneVisualParams(laneVisualParams)
     }
 
     companion object {

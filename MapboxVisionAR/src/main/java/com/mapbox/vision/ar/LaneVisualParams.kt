@@ -15,7 +15,22 @@ import com.mapbox.vision.mobile.models.world.WorldCoordinate
 class LaneVisualParams(
     val color: Color,
     val width: Double,
-    val light: WorldCoordinate,
+    val light: WorldCoordinate?,
     val lightColor: Color,
     val ambientColor: Color
-)
+) {
+    companion object {
+        @JvmStatic
+        fun isValid(color: Color): Boolean {
+            if (color.a !in (0f..1f)) return false
+            if (color.r !in (0f..1f)) return false
+            if (color.g !in (0f..1f)) return false
+            if (color.b !in (0f..1f)) return false
+
+            return true
+        }
+
+        @JvmStatic
+        fun isValid(width: Double): Boolean = width >= 0.0
+    }
+}
