@@ -33,5 +33,10 @@ object VisionArManager : ModuleInterface {
     fun setRoute(route: Route) {
         nativeArManager.setRoute(route)
     }
+
+    @JvmStatic
+    fun setLaneLength(lengthMeters: Double) {
+        nativeArManager.setLaneLength(lengthMeters)
+    }
 }
 
