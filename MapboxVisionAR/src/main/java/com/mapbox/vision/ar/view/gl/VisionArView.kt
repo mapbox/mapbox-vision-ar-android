@@ -5,12 +5,12 @@ import android.graphics.PixelFormat
 import android.opengl.GLSurfaceView
 import android.util.AttributeSet
 import com.mapbox.vision.ar.LaneVisualParams
-import com.mapbox.vision.ar.VisionArEventsListener
-import com.mapbox.vision.ar.models.ArCamera
-import com.mapbox.vision.ar.models.ArLane
-import com.mapbox.vision.mobile.models.CameraParameters
-import com.mapbox.vision.mobile.models.frame.ImageFormat
-import com.mapbox.vision.mobile.models.frame.ImageSize
+import com.mapbox.vision.ar.core.VisionArEventsListener
+import com.mapbox.vision.ar.core.models.ArCamera
+import com.mapbox.vision.ar.core.models.ArLane
+import com.mapbox.vision.mobile.core.models.CameraParameters
+import com.mapbox.vision.mobile.core.models.frame.ImageFormat
+import com.mapbox.vision.mobile.core.models.frame.ImageSize
 import com.mapbox.vision.video.videosource.VideoSourceListener
 
 /**

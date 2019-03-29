@@ -5,7 +5,9 @@ import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import com.mapbox.vision.BuildConfig
 import com.mapbox.vision.ar.LaneVisualParams
-import com.mapbox.vision.mobile.models.world.WorldCoordinate
+import com.mapbox.vision.ar.core.models.ArCamera
+import com.mapbox.vision.ar.core.models.ArLane
+import com.mapbox.vision.mobile.core.models.world.WorldCoordinate
 import com.mapbox.vision.utils.VisionLogger
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
@@ -24,8 +26,8 @@ internal class GlRender(
     private val background by lazy(mode = LazyThreadSafetyMode.NONE) { Background(width, height) }
     private var viewAspectRatio: Float? = 0f
 
-    internal var arCamera: com.mapbox.vision.ar.models.ArCamera? = null
-    internal var arLane: com.mapbox.vision.ar.models.ArLane? = null
+    internal var arCamera: ArCamera? = null
+    internal var arLane: ArLane? = null
 
     override fun onSurfaceCreated(unused: GL10, config: EGLConfig) {
         // Set the background frame color

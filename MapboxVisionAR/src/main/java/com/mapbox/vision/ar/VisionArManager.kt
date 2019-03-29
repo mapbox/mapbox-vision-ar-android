@@ -2,7 +2,9 @@ package com.mapbox.vision.ar
 
 import com.mapbox.vision.ModuleInterface
 import com.mapbox.vision.VisionManager
-import com.mapbox.vision.ar.models.Route
+import com.mapbox.vision.ar.core.NativeArManager
+import com.mapbox.vision.ar.core.VisionArEventsListener
+import com.mapbox.vision.ar.core.models.Route
 
 object VisionArManager : ModuleInterface {
 
