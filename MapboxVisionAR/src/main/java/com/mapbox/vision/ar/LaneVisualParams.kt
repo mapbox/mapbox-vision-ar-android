@@ -1,7 +1,7 @@
 package com.mapbox.vision.ar
 
-import com.mapbox.vision.ar.models.Color
-import com.mapbox.vision.mobile.models.world.WorldCoordinate
+import com.mapbox.vision.ar.core.models.Color
+import com.mapbox.vision.mobile.core.models.world.WorldCoordinate
 
 /**
  * Parameters used by [com.mapbox.vision.ar.view.gl.VisionArView] to draw AR lane.

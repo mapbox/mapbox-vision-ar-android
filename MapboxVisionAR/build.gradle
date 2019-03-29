@@ -33,7 +33,7 @@ if (envVarOrLocalProperty('IS_LOCAL_DEVELOPMENT')) {
 
         // TODO finish packaging options
         packageOptions {
-            prefix = "com.mapbox.vision.ar"
+            prefix = "com.mapbox.vision.ar.core"
             suppress = true
         }
         packageOptions {
@@ -41,7 +41,7 @@ if (envVarOrLocalProperty('IS_LOCAL_DEVELOPMENT')) {
             suppress = false
         }
         packageOptions {
-            prefix = "com.mapbox.vision.ar.models"
+            prefix = "com.mapbox.vision.ar.core.models"
             suppress = false
         }
     }
@@ -78,9 +78,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     if (envVarOrLocalProperty('BUILD_CORE_FROM_SOURCE')) {
-        implementation project(path: ':CoreSdk')
-        implementation project(path: ':CoreAr')
-        implementation project(path: ':Vision')
+        api  project(path: ':CoreSdk')
+        api  project(path: ':Vision')
+        implementation  project(path: ':CoreAr')
     } else {
         api "com.mapbox.vision:mapbox-android-vision:$vision_core"
         // TODO core vision AR
