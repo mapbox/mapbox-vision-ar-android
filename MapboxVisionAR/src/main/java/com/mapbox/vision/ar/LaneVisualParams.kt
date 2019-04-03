@@ -13,13 +13,16 @@ import com.mapbox.vision.mobile.core.models.world.WorldCoordinate
  * @property ambientColor ambient color
  */
 class LaneVisualParams(
-    val color: Color,
-    val width: Double,
-    val light: WorldCoordinate?,
-    val lightColor: Color,
-    val ambientColor: Color
+    val color: Color = INVALID_COLOR,
+    val width: Double = -1.0,
+    val light: WorldCoordinate? = null,
+    val lightColor: Color = INVALID_COLOR,
+    val ambientColor: Color = INVALID_COLOR
 ) {
     companion object {
+
+        private val INVALID_COLOR = Color(-1f, -1f, -1f, -1f)
+
         @JvmStatic
         fun isValid(color: Color): Boolean {
             if (color.a !in (0f..1f)) return false

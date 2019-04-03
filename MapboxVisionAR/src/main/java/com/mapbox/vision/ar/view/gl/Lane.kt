@@ -20,6 +20,7 @@ uniform mat4 uMVPMatrix;
 uniform mat4 uModelMatrix;
 uniform mat3 uNormMatrix;
 uniform vec3 uLaneParams[4];
+uniform float uLaneWidthRatio;
 
 attribute vec3 aPosition;
 attribute vec2 aTex;
