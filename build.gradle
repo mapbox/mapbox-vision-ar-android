@@ -27,7 +27,16 @@ allprojects {
         jcenter()
         mavenCentral()
         mavenLocal()
-        maven { url 'https://mapbox.bintray.com/mapbox' }
-        maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+        maven {
+            credentials {
+                username mapboxMavenUser
+                password mapboxMavenToken
+            }
+            authentication {
+                basic(BasicAuthentication)
+            }
+
+            url 'https://cloudfront-staging.tilestream.net/downloads/v1/vision/maven'
+        }
     }
 }
