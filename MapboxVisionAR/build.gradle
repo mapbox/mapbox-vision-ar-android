@@ -85,8 +85,6 @@ dependencies {
         api "com.mapbox.vision:mapbox-android-vision:$vision_native"
         api "com.mapbox.vision:mapbox-android-vision-ar-native:$vision_native"
     }
-
-    api "com.mapbox.mapboxsdk:mapbox-android-navigation:$mapbox_navigation"
 }
 
 tasks.withType(Javadoc).all {
