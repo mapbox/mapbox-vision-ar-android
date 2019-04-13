@@ -31,7 +31,6 @@ if (envVarOrLocalProperty('IS_LOCAL_DEVELOPMENT')) {
             defaultKotlinTasks() + [':CoreAr:compileReleaseKotlin']
         }
 
-        // TODO finish packaging options
         packageOptions {
             prefix = "com.mapbox.vision.ar.core"
             suppress = true
