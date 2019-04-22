@@ -6,6 +6,15 @@ ext {
     compile_sdk_version = 28
     build_tools_version = '28.0.3'
 
-    vision_core = '0.2.0'
+    support_lib = '27.1.1'
+
+    vision_native = '0.3.0'
+
     mapbox_navigation = '0.21.0'
+
+    mapbox_core = '0.2.1'
+    mapbox_telemetry = '3.5.5'
+    mapbox_navigation = '0.22.0'
+    mapbox_sdk = '6.6.0'
+    mapbox_location_layer = '0.8.2'
 }
